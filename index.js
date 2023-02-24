@@ -26,7 +26,7 @@ function giveCardImage(user, card) {
     const appendTo = $(`.${user.capitalize()} > section`);
 
     if (user == 'Dealer' && hands.filter((item) => item.User == 'Dealer').length > 1 &&!dealerShownCard) 
-        $(`<img class="Cards" src="Cards/back@2x.png"/>`).appendTo(appendTo);
+        $(`<img class="Cards" id="hidden" src="Cards/back@2x.png"/>`).appendTo(appendTo);
     else 
         $(`<img class="Cards" src="Cards/${card.Value.length > 1 || card.Value == 10 && card.Type != 'Ten' ? card.Symbol + card.Type : card.Symbol + card.Value }.png" />`).appendTo(appendTo)
 }
@@ -73,18 +73,23 @@ async function drawCard(player = null) {
     }
     newCard(player.capitalize())
 }
-async function Hit() {
-    await drawCard('Player');
-    if (getCardValues(hands.filter((item) => item.User == 'Player')) > 21){
-        Busted();
-        return;
-    }
+function turnDealersCard() {
+    const _ = hands.filter((item) => item.User == 'Dealer');
+    const dealersHand = _[_.length-1];
+    const imageReplace = $(`
+        <img class="Cards" src="Cards/${dealersHand.Card.Type == 'Ace' || dealersHand.Card.Value >= 10 && dealersHand.Card.Type != 'Ten'? 
+            dealersHand.Card.Symbol + dealersHand.Card.Type : dealersHand.Card.Symbol + dealersHand.Card.Value}.png" />`)
+    $('.Dealer-Cards #hidden')
+        .replaceWith(imageReplace)
 }
-async function Busted() {
+async function hit() {
+    await drawCard('Player');
+}
+function Stand() {
+    if (!GameState) return;
+    dealerShownCard = true;
     gameState = false;
-    while (getCardValues(hands.filter((item) => item.User == 'Dealer')) <= 17) {
-        await drawCard('Dealer');
-    }
+    
 }
 
 //#endregion
