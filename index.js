@@ -1,6 +1,6 @@
 const cards = [];
 let hands = [];
-let gameState = true;
+let gameState = true; // The game is started
 let dealerShownCard = false;
 
 class Cards {
@@ -17,25 +17,21 @@ class Hand {
     }
 }
 String.prototype.capitalize = function() {return this.charAt(0).toUpperCase() + this.slice(1)};
-Hand.prototype.newCard = async (player) => {
-    let chosenCard = cards.shift();
-    // const user = i % 2 == 0 ? 'Player' : 'Dealer';
-    this.push(new Hand(player, chosenCard));
-    newCount();
-    setCardValues(hands.filter((item) => item.player == player));
-    giveCardImage(player, chosenCard);
-    drawStartCards();
-}
 
-
-/*General usefull functions*/
+//#region General usefull functions
 async function wait(time) {await new Promise((res) => {setTimeout(res, time)})}
 function giveCardImage(user, card) {
-    $(`.${user.capitalize()} > section`)
-        .append(`<img class="Cards" src="Cards/${card.Value.length > 1 ? card.Symbol + 'Ace' : card.Symbol + card.Value }.png" />`)
+    const appendTo = $(`.${user.capitalize()} > section`);
+
+    if (user == 'Dealer' && hands.filter((item) => item.User == 'Dealer').length > 1) 
+        $(`<img class="Cards" src="Cards/back@2x.png"/>`).appendTo(appendTo);
+    else 
+        $(`<img class="Cards" src="Cards/${card.Value.length > 1 ? card.Symbol + 'Ace' : card.Symbol + card.Value }.png" />`).appendTo(appendTo)
 }
 function newCount() {$('#CardCount').text(`${cards.length}`)}
-/*Creation, shuffling etc for the game to start.*/
+//#endregion
+
+//#region Start functions
 async function createCards() {
     const symbols = ['Club', 'Diamond', 'Heart', 'Spade'];
     const types = [['Two', 2], ['Three', 3], ['Four', 4], ['Five', 5], ['Six', 6], ['Seven', 7], ['Eight', 8], ['Nine', 9],['Ten', 10], ['Jack', 10], ['Queen', 10], ['King', 10], ['Ace', [1,11]]]
@@ -54,15 +50,17 @@ async function shuffle() {
 		cards[j] = temp; 
 	};
 }
-async function newCard(user) {
-    let chosenCard = cards.shift();
-    hands.push(new Hand(user, chosenCard));
-    newCount();
-    getCardValues(hands.filter((item) => item.User == user));
-    giveCardImage(user, chosenCard);
-    
-}
+//#endregion
+
+//#region Play functions
 async function drawCard(player = null) {
+    const newCard = (user) => {
+        let chosenCard = cards.shift();
+        hands.push(new Hand(user, chosenCard));
+        newCount();
+        getCardValues(hands.filter((item) => item.User == user));
+        giveCardImage(user, chosenCard);
+    }
     if (!gameState)
         return;
     if (player == null) {
@@ -73,11 +71,22 @@ async function drawCard(player = null) {
     }
     newCard(player.capitalize())
 }
-function Hit() {
-    if (getCardValues(hand.filter(x => x.User == 'Player')) > 21)
+async function Hit() {
+    await drawCard('Player');
+    if (getCardValues(hands.filter((item) => item.User == 'Player')) > 21){
         Busted();
-    drawCard('player');
+        return;
+    }
 }
+async function Busted() {
+    gameState = false;
+    while (getCardValues(hands.filter((item) => item.User == 'Dealer')) <= 17) {
+        await drawCard('Dealer');
+    }
+}
+
+//#endregion
+
 function getCardValues(hand) {
     let newValue = 0;
     let aceCount = 0;
@@ -101,7 +110,6 @@ function getCardValues(hand) {
                 aceCount++;
             }
         });
-
     $(`.${hand[0].User.capitalize()} .Value > span`).text(newValue);
     return newValue;
 }
