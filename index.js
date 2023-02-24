@@ -1,3 +1,5 @@
+
+
 const cards = [];
 let hands = [];
 let gameState = true; // The game is started
@@ -23,10 +25,10 @@ async function wait(time) {await new Promise((res) => {setTimeout(res, time)})}
 function giveCardImage(user, card) {
     const appendTo = $(`.${user.capitalize()} > section`);
 
-    if (user == 'Dealer' && hands.filter((item) => item.User == 'Dealer').length > 1) 
+    if (user == 'Dealer' && hands.filter((item) => item.User == 'Dealer').length > 1 &&!dealerShownCard) 
         $(`<img class="Cards" src="Cards/back@2x.png"/>`).appendTo(appendTo);
     else 
-        $(`<img class="Cards" src="Cards/${card.Value.length > 1 ? card.Symbol + 'Ace' : card.Symbol + card.Value }.png" />`).appendTo(appendTo)
+        $(`<img class="Cards" src="Cards/${card.Value.length > 1 || card.Value == 10 && card.Type != 'Ten' ? card.Symbol + card.Type : card.Symbol + card.Value }.png" />`).appendTo(appendTo)
 }
 function newCount() {$('#CardCount').text(`${cards.length}`)}
 //#endregion
@@ -91,10 +93,17 @@ function getCardValues(hand) {
     let newValue = 0;
     let aceCount = 0;
     const calcAceValue = (value, item) => {return newValue + value >= 10 && aceCount < 1? item.Card.Value[1] : item.Card.Value[0] }
+    
+    if (hand[0].User == 'Dealer' && !dealerShownCard && hand.length > 1) {
+        console.log("in")
+        console.log(hand[0].Card.Type)
+        newValue = hand[0].Card.Type == 'Ace' ? hand[0].Card.Value : hand[0].Card.Value[1];
+        $(`.${hand[0].User.capitalize()} .Value > span`).text(newValue);
+        return newValue;
+    }
 
     hand
         .sort((a,b) => {
-            console.log(a.Card.Type)
             if (a.Card.Type < b.Card.Type)
                 return 1;
             else if (a.Card.Type > b.Card.Type)
@@ -110,7 +119,9 @@ function getCardValues(hand) {
                 aceCount++;
             }
         });
-    $(`.${hand[0].User.capitalize()} .Value > span`).text(newValue);
+        
+
+        $(`.${hand[0].User.capitalize()} .Value > span`).text(newValue);
     return newValue;
 }
 
