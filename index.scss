@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&family=Roboto+Mono:ital,wght@1,300&display=swap');
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+/*End of default properties*/
+
+@mixin CenterIt($placement: center, $placement2: center) {
+    & {
+        display: flex;
+        justify-content: $placement;
+        align-items: $placement2;
+    }
+}
+
+/*End of mixins*/
+.Layout {
+    @include CenterIt();
+    flex-flow: row wrap;
+    position: relative;
+    background: linear-gradient(to right, #56ab2f, #a8e063);
+    height: 100%;
+    min-height: 100vh;
+    width: 100%;
+    gap: 15rem;
+    label {
+        font-size: 1.33em;
+        color: rgba(50,55,30,.89);
+        letter-spacing: 1px;
+        span {
+            text-decoration: underline;
+        }
+    }
+    .Availeable-Cards {
+        position: absolute;
+        top: 3rem;
+    }
+    $CardHeight: 200px;
+    $CardWidth: 150px;
+    &-Hand {
+        display: flex;
+        flex-flow: column wrap;
+        min-height: $CardHeight;
+        > label {
+            text-align: center;
+            padding: 25px 0 15px 0;
+        }
+        .Value {padding: 5px 0;}
+        .Cards {
+            background-color: rgba(244,244,244,.8);
+            padding: 5px;
+            border-radius: 5px;
+            height: $CardHeight;
+            width: $CardWidth;
+        }
+    }
+    &-Buttons {
+        position: absolute;
+        bottom: 5rem;
+        height: max-content;
+        width: max-content;
+        button {
+            height: 66px;
+            width: 128px;
+            outline: none;
+            border: none;
+            cursor: pointer;
+            &:nth-child(1) {
+                background-color: rgba(0,255,0,.7);
+            }
+            &:nth-child(2) {
+                background-color: rgba(255,0,0,1);
+            }
+        }
+    }
+}
+
+
+@media only screen and (max-width: 846px) {
+    .Layout {
+        flex-direction: column;
+        gap: 0rem;
+        padding-top: 1rem;
+        &-Hand {
+            label:first-of-type {
+                padding-bottom: 0;
+            }
+        }
+    }
+    .Availeable-Cards {
+        top: 0 !important;
+    }
+}
