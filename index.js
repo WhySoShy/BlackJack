@@ -2,7 +2,6 @@ const cards = [];
 let hands = [];
 let gameState = true; // The game is started
 let dealerShownCard = false;
-// let playerBusted = false;
 
 class Cards {
     constructor(symbol, type, value) {
@@ -52,7 +51,7 @@ function newCount() {$('#CardCount').text(`${cards.length}`)}
  */
 function createCards() {
     const symbols = ['Club', 'Diamond', 'Heart', 'Spade'];
-    const types = [['Two', 2], ['Three', 3], ['Four', 4], ['Five', 5], ['Six', 6], ['Seven', 7], ['Eight', 8], ['Nine', 9],['Ten', 10], ['Jack', 10], ['Queen', 10], ['King', 10], ['Ace', [1,11]]]
+    const types = [ ['Two', 2], ['Three', 3], ['Four', 4], ['Five', 5], ['Six', 6], ['Seven', 7], ['Eight', 8], ['Nine', 9],['Ten', 10],['Jack', 10], ['Queen', 10], ['King', 10], ['Ace', [1,11]]] 
     for(let i = 0; i<symbols.length;i++)
         for(let j = 0; j<types.length;j++)
             cards.push(new Cards(symbols[i], types[j][0], types[j][1]))
@@ -103,13 +102,12 @@ async function turnDealersCard() {
     const dealersHand = _[_.length-1];
     $('#hidden').addClass('Runit');
     const imageReplace = $(`<img class="Cards RunItBack" src="Cards/${dealersHand.Card.Type == 'Ace' || dealersHand.Card.Value >= 10 && dealersHand.Card.Type != 'Ten'? dealersHand.Card.Symbol + dealersHand.Card.Type : dealersHand.Card.Symbol + dealersHand.Card.Value}.png" />`)
-    await wait (1050) //1350
-
-    console.log($('.Dealer-Cards #hidden').position())
+    await wait (1050); 
 
     $('.Dealer-Cards #hidden')
-        .replaceWith(imageReplace)
-    await wait(5000);
+        .replaceWith(imageReplace);
+    await wait (2000)
+    imageReplace.removeClass('RunItBack');
 }
 /**
  * Gives you a new card
@@ -123,12 +121,7 @@ async function hit() {
         await drawCard('Player');
         value = getCardValues('Player');
     }
-    if (value == 21) {
-        console.log(21)
-        return;
-    }
-    else if (value > 21) {
-        console.log("Busted");
+    if (value == 21 || value > 21) {
         await turnDealersCard();
         return;
     }
@@ -151,14 +144,18 @@ async function stand() {
 //#endregion
 function getCardValues(user) {
     let newValue = 0;
-    let aceCount = 0;
     const hand = hands.filter((item) => item.User == user.capitalize());
-    const calcAceValue = (value, item) => {return newValue + value >= 10 && aceCount < 1? item.Card.Value[1] : item.Card.Value[0] }
+    let aceCount = hand.filter((item) => item.Card.Type == 'Ace').length;
+    const dec = (value) => {aceCount--; return value;}
+    const calcAceValue = (item) => {
+        return item.Card.Type == 'Ace' ? (
+            newValue + 11 > 21 && aceCount > 1 ? (
+                dec(item.Card.Value[0])): item.Card.Value[1]
+            ) : item.Card.Value
+    }
 
     if (hand[0].User == 'Dealer' && !dealerShownCard && hand.length > 1) {
-        console.log("in")
-        console.log(hand[0].Card.Type)
-        newValue = hand[0].Card.Type == 'Ace' ? hand[0].Card.Value : hand[0].Card.Value[1];
+        newValue = hand[0].Card.Type == 'Ace' ? hand[0].Card.Value[1] : hand[0].Card.Value[0];
         $(`.${hand[0].User.capitalize()} .Value > span`).text(newValue);
         return newValue;
     }
@@ -173,12 +170,9 @@ function getCardValues(user) {
                 return 0;
         })
         .forEach((item) => {
-            if (!Array.isArray(item.Card.Value))
-                newValue += item.Card.Value;
-            else {
-                newValue += calcAceValue(item.Card.Value[1], item);
-                aceCount++;
-            }
+            newValue += calcAceValue(item);
+            if (newValue > 21 && aceCount > 0)
+                newValue -= dec(10);
         });
         
 
