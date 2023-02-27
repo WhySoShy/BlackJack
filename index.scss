@@ -43,6 +43,7 @@
         display: flex;
         flex-flow: column wrap;
         min-height: $CardHeight;
+        position: relative;
         > label {
             text-align: center;
             padding: 25px 0 15px 0;
@@ -74,6 +75,25 @@
                 background-color: rgba(255,0,0,1);
             }
         }
+    }
+}
+
+
+$Scale: scale(1.0555); //1.11
+$RotateY: rotateY(90deg); //180deg
+$TranslateY: translateY(-25px); //50px
+.Runit {
+    transition: 1s;
+    transform: $Scale $TranslateY $RotateY;
+}
+.RunItBack {
+    transform: $Scale $TranslateY $RotateY;
+    animation: 2s TurnBack forwards;
+}
+
+@keyframes TurnBack {
+    100% {
+        transform: scale(1) translateY(0) rotateY(0);
     }
 }
 

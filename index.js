@@ -101,11 +101,15 @@ async function drawCard(player = null, force = false) {
 async function turnDealersCard() {
     const _ = hands.filter((item) => item.User == 'Dealer');
     const dealersHand = _[_.length-1];
-    const imageReplace = $(`
-        <img class="Cards" src="Cards/${dealersHand.Card.Type == 'Ace' || dealersHand.Card.Value >= 10 && dealersHand.Card.Type != 'Ten'? 
-            dealersHand.Card.Symbol + dealersHand.Card.Type : dealersHand.Card.Symbol + dealersHand.Card.Value}.png" />`)
+    $('#hidden').addClass('Runit');
+    const imageReplace = $(`<img class="Cards RunItBack" src="Cards/${dealersHand.Card.Type == 'Ace' || dealersHand.Card.Value >= 10 && dealersHand.Card.Type != 'Ten'? dealersHand.Card.Symbol + dealersHand.Card.Type : dealersHand.Card.Symbol + dealersHand.Card.Value}.png" />`)
+    await wait (1050) //1350
+
+    console.log($('.Dealer-Cards #hidden').position())
+
     $('.Dealer-Cards #hidden')
         .replaceWith(imageReplace)
+    await wait(5000);
 }
 /**
  * Gives you a new card
@@ -119,27 +123,17 @@ async function hit() {
         await drawCard('Player');
         value = getCardValues('Player');
     }
-    switch(value) {
-        case value == 21:
-            console.log(21);
-            break;
-        case value > 21:
-            console.log("Busted");
-            break;
+    if (value == 21) {
+        console.log(21)
+        return;
     }
-
+    else if (value > 21) {
+        console.log("Busted");
+        await turnDealersCard();
+        return;
+    }
 }
-// if (value < 21) {
-//     return;
-// }
-// else if (value == 21) {
-//     console.log('You cannot pull anymore cards');
-//     return;
-// }
-// turnDealersCard();
-// console.log("Player busted")
-async function Stand() {
-    if (!gameState) return;
+async function stand() {
     dealerShownCard = true;
     gameState = false;
     await turnDealersCard();
@@ -191,7 +185,6 @@ function getCardValues(user) {
         $(`.${hand[0].User.capitalize()} .Value > span`).text(newValue);
     return newValue;
 }
-
 
 createCards();
 drawCard();

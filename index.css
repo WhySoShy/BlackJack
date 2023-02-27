@@ -38,6 +38,7 @@
   display: flex;
   flex-flow: column wrap;
   min-height: 200px;
+  position: relative;
 }
 .Layout-Hand > label {
   text-align: center;
@@ -75,6 +76,21 @@
   background-color: rgb(255, 0, 0);
 }
 
+.Runit {
+  transition: 1s;
+  transform: scale(1.0555) translateY(-25px) rotateY(90deg);
+}
+
+.RunItBack {
+  transform: scale(1.0555) translateY(-25px) rotateY(90deg);
+  animation: 2s TurnBack forwards;
+}
+
+@keyframes TurnBack {
+  100% {
+    transform: scale(1) translateY(0) rotateY(0);
+  }
+}
 @media only screen and (max-width: 846px) {
   .Layout {
     flex-direction: column;
