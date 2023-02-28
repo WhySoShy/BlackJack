@@ -7,6 +7,7 @@
 }
 /*End of default properties*/
 
+/* Mixin */
 @mixin CenterIt($placement: center, $placement2: center) {
     & {
         display: flex;
@@ -15,16 +16,14 @@
     }
 }
 
-/*End of mixins*/
 .Layout {
     @include CenterIt();
-    flex-flow: row wrap;
-    position: relative;
+    flex-flow: row nowrap;
     background: linear-gradient(to right, #56ab2f, #a8e063);
     height: 100%;
     min-height: 100vh;
     width: 100%;
-    gap: 15rem;
+    gap: 15px;
     label {
         font-size: 1.33em;
         color: rgba(50,55,30,.89);
@@ -37,11 +36,11 @@
         position: absolute;
         top: 3rem;
     }
-    $CardHeight: 200px;
-    $CardWidth: 150px;
+    $CardHeight: 150px;
+    $CardWidth: 125px;
     &-Hand {
         display: flex;
-        flex-flow: column wrap;
+        flex-flow: column nowrap;
         min-height: $CardHeight;
         position: relative;
         > label {
@@ -49,12 +48,16 @@
             padding: 25px 0 15px 0;
         }
         .Value {padding: 5px 0;}
-        .Cards {
-            background-color: rgba(244,244,244,.8);
-            padding: 5px;
-            border-radius: 5px;
-            height: $CardHeight;
-            width: $CardWidth;
+        section {
+            @include CenterIt(center, none);
+            flex-flow: wrap;
+            .Cards {
+                background-color: rgba(244,244,244,.8);
+                padding: 5px;
+                border-radius: 5px;
+                height: $CardHeight;
+                width: $CardWidth;
+            }
         }
     }
     &-Buttons {
@@ -78,6 +81,30 @@
     }
 }
 
+.StopScreen {
+    @include CenterIt();
+    flex-direction: column;
+    position: absolute;
+    inset: 0;
+    backdrop-filter: blur(5px);
+    transition: .5s ease-in-out;
+    label {
+        position: relative;
+        bottom: 50px;
+        font-size: 2em;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+    }
+    button {
+        height: 3rem;
+        width: 15rem;
+        font-size: 1.2em;
+        letter-spacing: 3px;
+        cursor: pointer;
+    }
+}
+
+/*#region Turn dealers card*/
 
 $Scale: scale(1.0555); //1.11
 $RotateY: rotateY(90deg); //180deg
@@ -97,12 +124,11 @@ $TranslateY: translateY(-25px); //50px
     }
 }
 
+/*#endregion*/
 
+/*#region Media queries*/
 @media only screen and (max-width: 846px) {
     .Layout {
-        flex-direction: column;
-        gap: 0rem;
-        padding-top: 1rem;
         &-Hand {
             label:first-of-type {
                 padding-bottom: 0;
@@ -113,3 +139,11 @@ $TranslateY: translateY(-25px); //50px
         top: 0 !important;
     }
 }
+// @media only screen and (min-width:847px) {
+//     .Layout {
+//         gap: 10rem;
+//     }
+// }
+
+/*#endregion*/
+

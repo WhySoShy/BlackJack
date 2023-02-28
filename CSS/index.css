@@ -7,15 +7,14 @@
 }
 
 /*End of default properties*/
-/*End of mixins*/
+/* Mixin */
 .Layout {
-  flex-flow: row wrap;
-  position: relative;
+  flex-flow: row nowrap;
   background: linear-gradient(to right, #56ab2f, #a8e063);
   height: 100%;
   min-height: 100vh;
   width: 100%;
-  gap: 15rem;
+  gap: 15px;
 }
 .Layout {
   display: flex;
@@ -36,8 +35,8 @@
 }
 .Layout-Hand {
   display: flex;
-  flex-flow: column wrap;
-  min-height: 200px;
+  flex-flow: column nowrap;
+  min-height: 150px;
   position: relative;
 }
 .Layout-Hand > label {
@@ -47,12 +46,20 @@
 .Layout-Hand .Value {
   padding: 5px 0;
 }
-.Layout-Hand .Cards {
+.Layout-Hand section {
+  flex-flow: wrap;
+}
+.Layout-Hand section {
+  display: flex;
+  justify-content: center;
+  align-items: none;
+}
+.Layout-Hand section .Cards {
   background-color: rgba(244, 244, 244, 0.8);
   padding: 5px;
   border-radius: 5px;
-  height: 200px;
-  width: 150px;
+  height: 150px;
+  width: 125px;
 }
 .Layout-Buttons {
   position: absolute;
@@ -76,6 +83,35 @@
   background-color: rgb(255, 0, 0);
 }
 
+.StopScreen {
+  flex-direction: column;
+  position: absolute;
+  inset: 0;
+  -webkit-backdrop-filter: blur(5px);
+          backdrop-filter: blur(5px);
+  transition: 0.5s ease-in-out;
+}
+.StopScreen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.StopScreen label {
+  position: relative;
+  bottom: 50px;
+  font-size: 2em;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+.StopScreen button {
+  height: 3rem;
+  width: 15rem;
+  font-size: 1.2em;
+  letter-spacing: 3px;
+  cursor: pointer;
+}
+
+/*#region Turn dealers card*/
 .Runit {
   transition: 1s;
   transform: scale(1.0555) translateY(-25px) rotateY(90deg);
@@ -91,16 +127,14 @@
     transform: scale(1) translateY(0) rotateY(0);
   }
 }
+/*#endregion*/
+/*#region Media queries*/
 @media only screen and (max-width: 846px) {
-  .Layout {
-    flex-direction: column;
-    gap: 0rem;
-    padding-top: 1rem;
-  }
   .Layout-Hand label:first-of-type {
     padding-bottom: 0;
   }
   .Availeable-Cards {
     top: 0 !important;
   }
-}/*# sourceMappingURL=index.css.map */
+}
+/*#endregion*//*# sourceMappingURL=index.css.map */

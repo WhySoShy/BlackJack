@@ -1,6 +1,6 @@
 const cards = [];
 let hands = [];
-let gameState = true; // The game is started
+let gameState = false; // true = game i started
 let dealerShownCard = false;
 
 class Cards {
@@ -45,7 +45,7 @@ function giveCardImage(user, card) {
 function newCount() {$('#CardCount').text(`${cards.length}`)}
 //#endregion
 
-//#region Start functions
+//#region Start/End functions
 /**
  * Creates all the cards.
  */
@@ -106,8 +106,9 @@ async function turnDealersCard() {
 
     $('.Dealer-Cards #hidden')
         .replaceWith(imageReplace);
-    await wait (2000)
-    imageReplace.removeClass('RunItBack');
+    
+    setTimeout(() => {imageReplace.removeClass('RunItBack')}, 2000)
+    await wait (200)
 }
 /**
  * Gives you a new card
@@ -117,12 +118,11 @@ async function hit() {
     if (!gameState)
         return;
     if (cards.length > 0 && value < 21) {
-        console.log("??")
         await drawCard('Player');
         value = getCardValues('Player');
     }
     if (value == 21 || value > 21) {
-        await turnDealersCard();
+        endGame();
         return;
     }
 }
@@ -130,17 +130,50 @@ async function stand() {
     dealerShownCard = true;
     gameState = false;
     await turnDealersCard();
-    if (getCardValues('Player') <= 21)  {
+    endGame();
+}
+async function start() {
+    $('.StopScreen').css({
+        "backdrop-filter": "none",
+        "opacity": 0,
+        "z-index": -1
+    });
+    gameState = true;
+    await wait(250);
+    createCards();
+    drawCard();
+
+}
+
+async function endGame() {
+    await turnDealersCard();
+    console.log(1)
+    if (getCardValues('Player') <= 21) {
+        console.log(2);
         while (getCardValues('Dealer') < 17) 
         {
+            console.log(3);
             await wait(250);
             await drawCard('Dealer', true);
         }
+        if (getCardValues('Dealer') > 21)
+            busted("Player");
     }
-    else
-        console.log("Dealer down, you've busted")
-}
+    else {
+        busted();
+        console.log("You've busted");
+    }
 
+}
+async function busted(player = "Player") {
+    await wait(1000);
+    hands = [];
+    $('.Dealer-Cards, .Player-Cards').empty();
+    $('.Value span').text('0');
+    gameState = true;
+    drawCard();
+    dealerShownCard = false;
+}
 //#endregion
 function getCardValues(user) {
     let newValue = 0;
@@ -179,6 +212,3 @@ function getCardValues(user) {
         $(`.${hand[0].User.capitalize()} .Value > span`).text(newValue);
     return newValue;
 }
-
-createCards();
-drawCard();
