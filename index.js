@@ -1,35 +1,58 @@
-const cards = [];
-let hands = [];
-let gameState = false; // true = game i started
-let dealerShownCard = false;
+let cards = [], hands = [];
+let dealerShownCard = false, timeForShuffle = false, gameState = false;
 
-class Cards {
+class DeckOfCards {
     constructor(symbol, type, value) {
         this.Type = type;
         this.Symbol = symbol;
         this.Value = value;
     }
 }
-class Hand {
+class PlayerHand {
     constructor(user, card) {
         this.User = user;
         this.Card = card;
     }
 }
+//#region Start/End functions
+/**
+ * Creates all the cards.
+ */
+function createCards() {
+    const symbols = ['Club', 'Diamond', 'Heart', 'Spade'];
+    const types = [ ['Two', 2], ['Three', 3], ['Four', 4], ['Five', 5], ['Six', 6], ['Seven', 7], ['Eight', 8], ['Nine', 9],['Ten', 10],['Jack', 10], ['Queen', 10], ['King', 10], ['Ace', [1,11]]] 
+    for(let i = 0; i<symbols.length;i++)
+        for(let j = 0; j<types.length;j++)
+            cards.push(new DeckOfCards (symbols[i], types[j][0], types[j][1]))
+    newCount();
+    shuffle();
+}
+/**
+ * Shuffles the deck of cards from
+ */
+function shuffle() {
+    for(let i=0;i<cards.length;i++){
+        let j = Math.floor(Math.random() * i);
+        let temp = cards[i];
+        cards[i] = cards[j];
+        cards[j] = temp; 
+    };
+}
+//#endregion
+//#region General usefull functions
 /**
  * @returns a string uppercased 
  */
 String.prototype.capitalize = function() {return this.charAt(0).toUpperCase() + this.slice(1)};
 
-//#region General usefull functions
 /**
  * Sets a waiting timer 
  */
 async function wait(time) {await new Promise((res) => {setTimeout(res, time)})}
 /**
  * Adds an image element into the DOM
- * @param {Hand} user 
- * @param {Cards} card 
+ * @param {PlayerHand} user 
+ * @param {DeckOfCards} card 
  */
 function giveCardImage(user, card) {
     const appendTo = $(`.${user.capitalize()} > section`);
@@ -45,31 +68,6 @@ function giveCardImage(user, card) {
 function newCount() {$('#CardCount').text(`${cards.length}`)}
 //#endregion
 
-//#region Start/End functions
-/**
- * Creates all the cards.
- */
-function createCards() {
-    const symbols = ['Club', 'Diamond', 'Heart', 'Spade'];
-    const types = [ ['Two', 2], ['Three', 3], ['Four', 4], ['Five', 5], ['Six', 6], ['Seven', 7], ['Eight', 8], ['Nine', 9],['Ten', 10],['Jack', 10], ['Queen', 10], ['King', 10], ['Ace', [1,11]]] 
-    for(let i = 0; i<symbols.length;i++)
-        for(let j = 0; j<types.length;j++)
-            cards.push(new Cards(symbols[i], types[j][0], types[j][1]))
-    newCount();
-    shuffle();
-}
-/**
- * Shuffles the deck of cards from
- */
-function shuffle() {
-    for(let i=0;i<cards.length;i++){
-		let j = Math.floor(Math.random() * i);
-		let temp = cards[i];
-		cards[i] = cards[j];
-		cards[j] = temp; 
-	};
-}
-//#endregion
 
 //#region Play functions
 /**
@@ -80,7 +78,7 @@ function shuffle() {
 async function drawCard(player = null, force = false) {
     const newCard = (user) => {
         let chosenCard = cards.shift();
-        hands.push(new Hand(user, chosenCard));
+        hands.push(new PlayerHand(user, chosenCard));
         newCount();
         getCardValues(user);
         giveCardImage(user, chosenCard);
@@ -108,6 +106,7 @@ async function turnDealersCard() {
         .replaceWith(imageReplace);
     
     setTimeout(() => {imageReplace.removeClass('RunItBack')}, 2000)
+    getCardValues('Dealer');
     await wait (200)
 }
 /**
@@ -147,33 +146,38 @@ async function start() {
 
 async function endGame() {
     await turnDealersCard();
-    console.log(1)
-    if (getCardValues('Player') <= 21) {
-        console.log(2);
+    const playerValue = getCardValues('Player');
+    if (playerValue <= 21) {
         while (getCardValues('Dealer') < 17) 
         {
-            console.log(3);
             await wait(250);
             await drawCard('Dealer', true);
         }
         if (getCardValues('Dealer') > 21)
-            busted("Player");
+            await busted("Player");
+        
+        else if (playerValue > getCardValues('Dealer'))
+            console.log("You won");
     }
     else {
-        busted();
+        await busted();
         console.log("You've busted");
     }
-
+    await wait(1000);
+    console.log("done");
+    await busted(null);
+    drawCard();
 }
 async function busted(player = "Player") {
-    await wait(1000);
+    console.log("Busted started")
+    dealerShownCard = false;
+    gameState = true;
     hands = [];
     $('.Dealer-Cards, .Player-Cards').empty();
     $('.Value span').text('0');
-    gameState = true;
-    drawCard();
-    dealerShownCard = false;
+    console.log("busted done")
 }
+
 //#endregion
 function getCardValues(user) {
     let newValue = 0;
@@ -212,3 +216,6 @@ function getCardValues(user) {
         $(`.${hand[0].User.capitalize()} .Value > span`).text(newValue);
     return newValue;
 }
+
+
+start();

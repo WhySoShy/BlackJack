@@ -7,6 +7,9 @@
 }
 /*End of default properties*/
 
+$CardHeight: 125px;
+$CardWidth: 100px;
+
 /* Mixin */
 @mixin CenterIt($placement: center, $placement2: center) {
     & {
@@ -17,27 +20,48 @@
 }
 
 .Layout {
-    @include CenterIt();
-    flex-flow: row nowrap;
+    @include CenterIt(center, none);
+    flex-flow: column nowrap;
     background: linear-gradient(to right, #56ab2f, #a8e063);
     height: 100%;
     min-height: 100vh;
     width: 100%;
     gap: 15px;
     label {
-        font-size: 1.33em;
+        font-size: 1.15em;
         color: rgba(50,55,30,.89);
         letter-spacing: 1px;
-        span {
-            text-decoration: underline;
-        }
+        text-align: center;
+    }
+    #GameArea {
+        height: max-content;
+        padding: 3rem;
     }
     .Availeable-Cards {
-        position: absolute;
-        top: 3rem;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: $CardHeight;
+        label {
+            font-size: 1.1em;
+            z-index: 2;
+            display: inherit;
+            flex-direction: column;
+        }
+        &::before {
+            content: '';
+            position: absolute;
+            border: 5px solid rgba(244,244,244,.8);
+            background: url(/Cards/back@2x.png) no-repeat;
+            background-size:cover;
+            color: black;
+            border-radius: 5px;
+            height: $CardHeight + 65;
+            width: $CardWidth - 15;
+            rotate: 90deg;
+        }
     }
-    $CardHeight: 150px;
-    $CardWidth: 125px;
     &-Hand {
         display: flex;
         flex-flow: column nowrap;
@@ -45,7 +69,7 @@
         position: relative;
         > label {
             text-align: center;
-            padding: 25px 0 15px 0;
+            // padding: 25px 0 15px 0;
         }
         .Value {padding: 5px 0;}
         section {
@@ -61,21 +85,29 @@
         }
     }
     &-Buttons {
-        position: absolute;
-        bottom: 5rem;
-        height: max-content;
-        width: max-content;
-        button {
-            height: 66px;
-            width: 128px;
-            outline: none;
-            border: none;
-            cursor: pointer;
-            &:nth-child(1) {
-                background-color: rgba(0,255,0,.7);
-            }
-            &:nth-child(2) {
-                background-color: rgba(255,0,0,1);
+        display: flex;
+        align-items: end;
+        height: 7rem;
+        flex-grow: 1;
+        > div {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-self: start;
+            gap: 15px;  
+            width: 100%;
+            button {
+                height: 66px;
+                width: 128px;
+                outline: none;
+                border: none;
+                cursor: pointer;
+                &:nth-child(1) {
+                    background-color: rgba(0,255,0,.7);
+                }
+                &:nth-child(2) {
+                    background-color: rgba(255,0,0,1);
+                }
             }
         }
     }

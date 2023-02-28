@@ -9,7 +9,7 @@
 /*End of default properties*/
 /* Mixin */
 .Layout {
-  flex-flow: row nowrap;
+  flex-flow: column nowrap;
   background: linear-gradient(to right, #56ab2f, #a8e063);
   height: 100%;
   min-height: 100vh;
@@ -19,29 +19,52 @@
 .Layout {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: none;
 }
 .Layout label {
-  font-size: 1.33em;
+  font-size: 1.15em;
   color: rgba(50, 55, 30, 0.89);
   letter-spacing: 1px;
+  text-align: center;
 }
-.Layout label span {
-  text-decoration: underline;
+.Layout #GameArea {
+  height: -moz-max-content;
+  height: max-content;
+  padding: 3rem;
 }
 .Layout .Availeable-Cards {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 125px;
+}
+.Layout .Availeable-Cards label {
+  font-size: 1.1em;
+  z-index: 2;
+  display: inherit;
+  flex-direction: column;
+}
+.Layout .Availeable-Cards::before {
+  content: "";
   position: absolute;
-  top: 3rem;
+  border: 5px solid rgba(244, 244, 244, 0.8);
+  background: url(/Cards/back@2x.png) no-repeat;
+  background-size: cover;
+  color: black;
+  border-radius: 5px;
+  height: 190px;
+  width: 85px;
+  rotate: 90deg;
 }
 .Layout-Hand {
   display: flex;
   flex-flow: column nowrap;
-  min-height: 150px;
+  min-height: 125px;
   position: relative;
 }
 .Layout-Hand > label {
   text-align: center;
-  padding: 25px 0 15px 0;
 }
 .Layout-Hand .Value {
   padding: 5px 0;
@@ -58,28 +81,34 @@
   background-color: rgba(244, 244, 244, 0.8);
   padding: 5px;
   border-radius: 5px;
-  height: 150px;
-  width: 125px;
+  height: 125px;
+  width: 100px;
 }
 .Layout-Buttons {
-  position: absolute;
-  bottom: 5rem;
-  height: -moz-max-content;
-  height: max-content;
-  width: -moz-max-content;
-  width: max-content;
+  display: flex;
+  align-items: end;
+  height: 7rem;
+  flex-grow: 1;
 }
-.Layout-Buttons button {
+.Layout-Buttons > div {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-self: start;
+  gap: 15px;
+  width: 100%;
+}
+.Layout-Buttons > div button {
   height: 66px;
   width: 128px;
   outline: none;
   border: none;
   cursor: pointer;
 }
-.Layout-Buttons button:nth-child(1) {
+.Layout-Buttons > div button:nth-child(1) {
   background-color: rgba(0, 255, 0, 0.7);
 }
-.Layout-Buttons button:nth-child(2) {
+.Layout-Buttons > div button:nth-child(2) {
   background-color: rgb(255, 0, 0);
 }
 
