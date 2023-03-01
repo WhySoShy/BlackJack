@@ -1,9 +1,9 @@
 // TODO: DONE | Add auto shuffle when the deck contains under 12 cards (After the round is done).
 // TODO: DONE | Find out why it removes and gives new card immediatly when not called in stand();
-// TODO: DONE (maybe) | Prevent spam clicking.
+// TODO: DONE(maybe) | Prevent spam clicking.
 
 let cards = [], hands = [];
-let dealerShownCard = false, timeForShuffle = false, gameState = false;
+let dealerShownCard = false, gameState = false;
 
 class DeckOfCards {
     constructor(symbol, type, value) {
@@ -24,7 +24,7 @@ class PlayerHand {
  */
 function createCards() {
     const symbols = ['Club', 'Diamond', 'Heart', 'Spade'],
-        types = [ ['Two', 2], ['Three', 3], ['Four', 4], ['Five', 5], ['Six', 6], ['Seven', 7] ] //, ['Eight', 8], ['Nine', 9],['Ten', 10],['Jack', 10], ['Queen', 10], ['King', 10], ['Ace', [1,11]]
+        types = [ ['Two', 2], ['Three', 3], ['Four', 4], ['Five', 5], ['Six', 6], ['Seven', 7], ['Eight', 8], ['Nine', 9],['Ten', 10],['Jack', 10], ['Queen', 10], ['King', 10], ['Ace', [1,11]] ]
     for(let i = 0; i<symbols.length;i++)
         for(let j = 0; j<types.length;j++)
             cards.push(new DeckOfCards (symbols[i], types[j][0], types[j][1]))
@@ -89,6 +89,7 @@ async function drawCard(player = null, force = false) {
     }
     if (!gameState && !force)
         return;
+
     if (player == null) {
         for(let i = 0; i<4;i++) 
             newCard(i % 2 == 0 ? 'Player' : 'Dealer');
@@ -104,8 +105,8 @@ async function drawCard(player = null, force = false) {
  * Turns the dealers card, whenever you bust or stand.
  */
 async function turnDealersCard() {
-    const _ = hands.filter((item) => item.User == 'Dealer');
-    const dealersHand = _[_.length-1];
+    const _ = hands.filter((item) => item.User == 'Dealer'),
+    dealersHand = _[_.length-1];
     $('#hidden').addClass('Runit');
     const imageReplace = $(`<img 
         class="Cards RunItBack"
@@ -117,7 +118,9 @@ async function turnDealersCard() {
             .replaceWith(imageReplace);
     }, 1050)
     
-    
+    $('.Dealer .Value > span').text(getCardValues('Dealer'))
+    console.log(getCardValues('Dealer'));
+
     setTimeout(() => {imageReplace.removeClass('RunItBack')}, 2000)
     await wait (2050)
 }
@@ -162,28 +165,24 @@ async function endGame() {
     await turnDealersCard();
     let dealerValue = getCardValues('Dealer');
     const playerValue = getCardValues('Player');
-    
-    console.log("asd");
 
-    if (playerValue <= 21) {
+    if (playerValue < 21) {        
         while (dealerValue  < 17) 
         {
             await wait(250);
             await drawCard('Dealer', true);
             dealerValue = getCardValues('Dealer');
-            console.log("asd");
         }
-        console.log("asd");
-        
-        if (dealerValue > 21)
-            await busted();
         
         if (playerValue > dealerValue )
             console.log("You won");
+        else if (playerValue < dealerValue)
+            console.log("You've lost");
+        else if (playerValue == dealerValue)
+            console.log("Equal sequal");
     }
     else {
-        console.log("asd");
-        await busted();
+        console.log("You've busted");
     }
 
     await wait(1000);
@@ -191,7 +190,7 @@ async function endGame() {
         await createCards();
 
     hands = [];
-    console.log("new cards inc");
+    await busted();
     drawCard(null, true); //To get the cards again
 }
 async function busted() {
