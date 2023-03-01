@@ -76,17 +76,26 @@ $CardWidth: 100px;
             @include CenterIt(center, none);
             flex-flow: wrap;
             .Cards {
-                background-color: rgba(244,244,244,.8);
-                padding: 5px;
+                transition: translate .15s ease-in-out, transform 1s;
+                background-color: rgba(244,244,244,1);
+                border: 4px solid rgba(100,100,100,.15);
                 border-radius: 5px;
+                padding: 5px;
                 height: $CardHeight;
                 width: $CardWidth;
+                &:not(:first-child) {
+                    margin-left: -50px;
+                }
+                &:hover {
+                    translate: 0 -15px 0;
+                    z-index: 1;
+                }
             }
         }
     }
     &-Buttons {
         display: flex;
-        align-items: end;
+        align-items: flex-end;
         height: 7rem;
         flex-grow: 1;
         > div {

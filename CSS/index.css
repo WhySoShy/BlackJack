@@ -78,15 +78,24 @@
   align-items: none;
 }
 .Layout-Hand section .Cards {
-  background-color: rgba(244, 244, 244, 0.8);
-  padding: 5px;
+  transition: translate 0.15s ease-in-out, transform 1s;
+  background-color: rgb(244, 244, 244);
+  border: 4px solid rgba(100, 100, 100, 0.15);
   border-radius: 5px;
+  padding: 5px;
   height: 125px;
   width: 100px;
 }
+.Layout-Hand section .Cards:not(:first-child) {
+  margin-left: -50px;
+}
+.Layout-Hand section .Cards:hover {
+  translate: 0 -15px 0;
+  z-index: 1;
+}
 .Layout-Buttons {
   display: flex;
-  align-items: end;
+  align-items: flex-end;
   height: 7rem;
   flex-grow: 1;
 }
