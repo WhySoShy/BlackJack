@@ -70,6 +70,32 @@ function giveCardImage(user, card) {
  * Changes the amount of remaining cards
  */
 function newCount() {$('#CardCount').text(`${cards.length}`)}
+/**
+ * 
+ * @param {String} txt1 First span in the element.
+ * @param {String} txt2 Second span in the element.
+ * @param {RGBA} color Color of the text.
+ */
+async function sendServiceMessage(txt1, txt2, color) {
+    const el = $('.Service-Messages label span'),
+        parentEl = $('.Service-Messages');
+    
+    parentEl.css({
+        "opacity": 1,
+        "z-index": 999
+    })
+    el.css({"color": color});
+
+    el.text(txt1);
+    el.next().text(txt2);
+    
+    await wait(1500);
+    
+    parentEl.css({
+        "opacity": 0,
+        "z-index": -1
+    })
+}
 //#endregion
 
 
@@ -173,13 +199,12 @@ async function endGame() {
             await drawCard('Dealer', true);
             dealerValue = getCardValues('Dealer');
         }
-        
         if (playerValue > dealerValue )
-            console.log("You won");
+            await sendServiceMessage("You", "Won", "rgba(0,230,0,.9)");
         else if (playerValue < dealerValue)
-            console.log("You've lost");
+            await sendServiceMessage("You", "lost", "rgba(0,230,0,.9)");
         else if (playerValue == dealerValue)
-            console.log("Equal sequal");
+            await sendServiceMessage("equal", "", "rgba(230,150,0,1)");
     }
     else {
         console.log("You've busted");
