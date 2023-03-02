@@ -6,7 +6,6 @@
     font-family: 'Golos Text', sans-serif;
 }
 /*End of default properties*/
-
 $CardHeight: 125px;
 $CardWidth: 100px;
 
@@ -142,6 +141,43 @@ $CardWidth: 100px;
     }
 }
 
+.Bet {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    label{
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        text-align: center;
+        font-size: 1.15em;
+        color: rgba(50, 55, 30, 0.89);
+    }
+    > div {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        width: max-content;
+        min-width: 8rem;
+        > div {
+            display: inherit;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            gap: 2.5px;
+            button {
+                font-size: 1.15em;
+                width: 70%;
+                height: 2rem;
+                cursor: pointer;
+            }
+        }
+    }
+}
+
 /*#region Turn dealers card*/
 
 $Scale: scale(1.0555); //1.11
@@ -177,11 +213,6 @@ $TranslateY: translateY(-25px); //50px
         top: 0 !important;
     }
 }
-// @media only screen and (min-width:847px) {
-//     .Layout {
-//         gap: 10rem;
-//     }
-// }
 
 /*#endregion*/
 

@@ -141,6 +141,44 @@
   text-transform: uppercase;
 }
 
+.Bet {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+}
+.Bet label {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  text-align: center;
+  font-size: 1.15em;
+  color: rgba(50, 55, 30, 0.89);
+}
+.Bet > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: -moz-max-content;
+  width: max-content;
+  min-width: 8rem;
+}
+.Bet > div > div {
+  display: inherit;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 2.5px;
+}
+.Bet > div > div button {
+  font-size: 1.15em;
+  width: 70%;
+  height: 2rem;
+  cursor: pointer;
+}
+
 /*#region Turn dealers card*/
 .Runit {
   transition: 1s;

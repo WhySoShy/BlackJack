@@ -1,9 +1,15 @@
 // TODO: DONE | Add auto shuffle when the deck contains under 12 cards (After the round is done).
 // TODO: DONE | Find out why it removes and gives new card immediatly when not called in stand();
 // TODO: DONE(maybe) | Prevent spam clicking.
+import { getItem, setItem } from '../modules/storage.js';
+
+$('.balance').text(`$${getItem('playerBalance')}`)
+
 
 let cards = [], hands = [];
 let dealerShownCard = false, gameState = false;
+let bet = 0;
+
 
 class DeckOfCards {
     constructor(symbol, type, value) {
@@ -120,8 +126,10 @@ async function drawCard(player = null, force = false) {
         for(let i = 0; i<4;i++) 
             newCard(i % 2 == 0 ? 'Player' : 'Dealer');
         
-        if(getCardValues('Player') == 21)
+        if(getCardValues('Player') == 21) {
+            await wait(1000);
             endGame();
+        }
 
         return;
     }
@@ -144,36 +152,40 @@ async function turnDealersCard() {
             .replaceWith(imageReplace);
     }, 1050)
     
-    $('.Dealer .Value > span').text(getCardValues('Dealer'))
-    console.log(getCardValues('Dealer'));
+    $('.Dealer .Value > span').text(getCardValues('Dealer'));
 
     setTimeout(() => {imageReplace.removeClass('RunItBack')}, 2000)
     await wait (2050)
 }
-/**
- * Gives you a new card
- */
-async function hit() {
-    let value = getCardValues('Player');
-    if (!gameState)
-        return;
-    gameState = false;
 
-    if (cards.length > 0 && value < 21) {
-        await drawCard('Player', true);
-        value = getCardValues('Player');
-    }
-    if (value == 21 || value > 21) {
-        endGame();
-        return;
-    }
-    gameState = true;
-}
-async function stand() {
-    dealerShownCard = true;
-    gameState = false;
-    await endGame();
-}
+// HIT
+$('.Layout-Buttons div > :nth-child(1)')
+    .click(async function() {
+        let value = getCardValues('Player');
+        if (!gameState)
+            return;
+        gameState = false;
+    
+        if (cards.length > 0 && value < 21) {
+            await drawCard('Player', true);
+            value = getCardValues('Player');
+        }
+        if (value == 21 || value > 21) {
+            endGame();
+            return;
+        }
+        gameState = true;
+    })
+
+// STAND
+$('.Layout-Buttons div > :nth-child(2)')
+    .click(async function() {
+        dealerShownCard = true;
+        gameState = false;
+        await endGame();
+    })
+
+
 async function start() {
     $('.StopScreen').css({
         "backdrop-filter": "none",
@@ -182,24 +194,23 @@ async function start() {
     });
     gameState = true;
     await wait(250);
-    createCards();
     drawCard();
-    
 }
 
 async function endGame() {
     await turnDealersCard();
     let dealerValue = getCardValues('Dealer');
     const playerValue = getCardValues('Player');
+    gameState = false;
 
-    if (playerValue < 21) {        
+    if (playerValue <= 21) {        
         while (dealerValue  < 17){
             await wait(250);
             await drawCard('Dealer', true);
             dealerValue = getCardValues('Dealer');
         }
-        if (playerValue > dealerValue )
-        await sendServiceMessage("You", "Won", "rgba(0,230,0,.9)");
+        if (playerValue > dealerValue || playerValue == 21)
+        await sendServiceMessage("You", "Win", "rgba(0,230,0,.9)");
         else if (playerValue < dealerValue)
         await sendServiceMessage("You", "lost", "rgba(230,0,0,.9)");
         else if (playerValue == dealerValue)
@@ -218,12 +229,11 @@ async function endGame() {
 
     hands = [];
     await busted();
-    drawCard(null, true); //To get the cards again
+    bet = 0;
+    updateBalanceUI();
 }
 async function busted() {
     dealerShownCard = false;
-    gameState = true;
-    await wait(1000);
     $('.Dealer-Cards, .Player-Cards').empty();
     $('.Value span').text('0');
 }
@@ -262,10 +272,33 @@ function getCardValues(user) {
                 newValue -= dec(10);
         });
         
-        console.log(user)
         $(`.${user.capitalize()} .Value > span`).text(newValue);
     return newValue;
 }
 
+$('.bet-btn')
+    .click(function() {
+        let balance = getItem('playerBalance'); 
+        if ((balance - Number($(this).text())) >= bet && !gameState)  {
+            bet += Number($(this).text())
+            $('.bet-balance').text(`$${bet}`)
+        }
+    })
 
-start();
+$('.start-btn')
+    .click(function() {
+        if (!gameState) {
+            start();
+            gameState = true;
+            setItem('playerBalance', getItem('playerBalance') - bet);
+            updateBalanceUI();
+        }
+    })
+
+function updateBalanceUI() {
+    let balance = getItem('playerBalance');
+    $('.balance').text(`$${balance}`);
+    $('.bet-balance').text(`$${bet}`)
+}
+
+createCards();
