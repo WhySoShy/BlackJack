@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Golos+Text:wght@500&family=Roboto&family=Roboto+Mono:ital,wght@1,300&display=swap');
+body {
+    min-height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+section {
+    display: inherit;
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+    > a {
+        min-width: 10rem;
+        padding: 2rem 3rem;
+        background-color: rgba(200,200,200,.3);
+        transition: .25s;
+
+        text-transform: uppercase;
+        text-decoration: none;
+        font-size: 1.53em;
+        font-family: 'Golos Text', sans-serif;
+        letter-spacing: 3px;
+        color: black;
+        &:hover {
+            background-color: rgba(200,200,200,.5);
+        }
+    }
+}

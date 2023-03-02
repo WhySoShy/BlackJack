@@ -13,6 +13,11 @@ app.get('/Game', (req, res) => {
     res.sendFile(dir + 'blackjack.html');
 })
 
+app.get('/Bank', (req, res) => {
+    res.sendFile(dir + 'bank.html');
+})
+
 app.listen(port, () => {
     console.log(`Listening on port ` + port)
 })
+
