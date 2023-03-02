@@ -181,8 +181,9 @@ $('.Layout-Buttons div > :nth-child(1)')
 $('.Layout-Buttons div > :nth-child(2)')
     .click(async function() {
         dealerShownCard = true;
-        gameState = false;
         await endGame();
+        await wait(4500);
+        gameState = false;
     })
 
 
@@ -202,23 +203,31 @@ async function endGame() {
     let dealerValue = getCardValues('Dealer');
     const playerValue = getCardValues('Player');
     gameState = false;
-
-    if (playerValue <= 21) {        
+    console.log(playerValue < 21);
+    if (playerValue < 21) {        
         while (dealerValue  < 17){
             await wait(250);
             await drawCard('Dealer', true);
             dealerValue = getCardValues('Dealer');
         }
-        if (playerValue > dealerValue || playerValue == 21)
+        if (playerValue > dealerValue) {
+            setItem('playerBalance', (getItem('playerBalance') + (bet * 3)))
+            await sendServiceMessage("You", "Win", "rgba(0,230,0,.9)");
+        }
+        else if (playerValue < dealerValue){
+            await sendServiceMessage("You", "lost", "rgba(230,0,0,.9)");
+        }
+        else if (playerValue == dealerValue) {
+            setItem('playerBalance', getItem('playerBalance') + bet)
+            await sendServiceMessage("equal", "", "rgba(230,150,0,1)");
+        }
+    }
+    else if (playerValue == 21) {
+        setItem('playerBalance', (getItem('playerBalance') + (bet * 3)))
         await sendServiceMessage("You", "Win", "rgba(0,230,0,.9)");
-        else if (playerValue < dealerValue)
-        await sendServiceMessage("You", "lost", "rgba(230,0,0,.9)");
-        else if (playerValue == dealerValue)
-        await sendServiceMessage("equal", "", "rgba(230,150,0,1)");
     }
     else {
         getCardValues("Dealer");
-
         await wait(1000)
         await sendServiceMessage("You", "lost", "rgba(230,0,0,.9)")
     }
@@ -298,7 +307,7 @@ $('.start-btn')
 function updateBalanceUI() {
     let balance = getItem('playerBalance');
     $('.balance').text(`$${balance}`);
-    $('.bet-balance').text(`$${bet}`)
+    $('.bet-balance').text(`$${bet}`);
 }
 
 createCards();
