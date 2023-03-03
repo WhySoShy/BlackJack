@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/blackjack/blackjack.css" />
+    <script src="jquery-3.6.1.min.js"></script>
+    <title>Blackjack</title>
+</head>
+<body>
+    <section class="Layout">
+        <div id="GameArea">
+            <div class="Layout-Hand Dealer">
+                <label>Dealers hand</label>
+                <label class="Value">Value: <span>0</span></label>
+                <section class="Dealer-Cards">
+                </section>
+            </div>
+            <div class="Availeable-Cards">
+                <label>Remaining cards <span id="CardCount">0</span></label>
+            </div>
+            <div class="Layout-Hand Player">
+                <section class="Player-Cards">
+                </section>
+                <label class="Value">Value: <span>0</span></label>
+                <label>Your hand</label>
+            </div>
+        </div>
+        <div class="Layout-Buttons">
+            <div>
+                <button>Hit</button>
+                <button>Stand</button>
+            </div>
+        </div>
+    </section>
+    <section class="Service-Messages">
+        <label>
+            <span>You</span>
+            <span>lost</span>
+        </label>
+    </section>
+    <section class="Bet">
+        <div>
+            <label>
+                Balance
+                <span class="balance">0</span>
+            </label>
+            <div>
+                <label>
+                    Bet
+                    <span class="bet-balance">$0</span>
+                </label>
+                <button class="bet-btn">25</button>
+                <button class="bet-btn">50</button>
+                <button class="bet-btn">100</button>
+                <button class="bet-btn">250</button>
+                <button class="bet-btn">500</button>
+                <button class="start-btn">START</button>
+            </div>
+        </div>
+    </section>
+    
+    
+    <script type="module" src="script/blackjack.js" defer></script>    
+</body>
+</html>

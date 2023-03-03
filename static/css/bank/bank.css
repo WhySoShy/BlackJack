@@ -1,0 +1,64 @@
+@import url("https://fonts.googleapis.com/css2?family=Golos+Text:wght@500&family=Roboto&family=Roboto+Mono:ital,wght@1,300&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Golos text", sans-serif;
+}
+
+body {
+  height: 100vh;
+  min-height: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 33px;
+}
+
+.bank {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
+.bank label {
+  font-size: 1.22em;
+}
+.bank .bank-loan > div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.bank .bank-loan > div button {
+  font-size: 1.2em;
+  padding: 0.5rem 3rem;
+  cursor: pointer;
+}
+
+.player-balance {
+  min-height: -moz-max-content;
+  min-height: max-content;
+  height: 6rem;
+  width: 28rem;
+  border-radius: 0 0 45% 45%;
+  background: linear-gradient(to right, #3e4040, #3e5555, #3e4040);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.player-balance label {
+  display: inherit;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  text-transform: uppercase;
+  color: white;
+  font-size: 1.5em;
+  text-align: center;
+}
+.player-balance label span {
+  font-size: 1.05em;
+}/*# sourceMappingURL=bank.css.map */

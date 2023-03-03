@@ -1,0 +1,208 @@
+@import url("https://fonts.googleapis.com/css2?family=Golos+Text:wght@500&family=Roboto&family=Roboto+Mono:ital,wght@1,300&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Golos Text", sans-serif;
+}
+
+/*End of default properties*/
+/* Mixin */
+.Layout {
+  flex-flow: column nowrap;
+  background: linear-gradient(to right, #56ab2f, #a8e063);
+  height: 100%;
+  min-height: 100vh;
+  width: 100%;
+  gap: 15px;
+}
+.Layout {
+  display: flex;
+  justify-content: center;
+  align-items: none;
+}
+.Layout label {
+  font-size: 1.15em;
+  color: rgba(50, 55, 30, 0.89);
+  letter-spacing: 1px;
+  text-align: center;
+}
+.Layout #GameArea {
+  height: -moz-max-content;
+  height: max-content;
+  padding: 3rem;
+}
+.Layout .Availeable-Cards {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 125px;
+}
+.Layout .Availeable-Cards label {
+  font-size: 1.1em;
+  z-index: 2;
+  display: inherit;
+  flex-direction: column;
+}
+.Layout .Availeable-Cards::before {
+  content: "";
+  position: absolute;
+  border: 5px solid rgba(244, 244, 244, 0.8);
+  background: url(/Cards/back@2x.png) no-repeat;
+  background-size: cover;
+  color: black;
+  border-radius: 5px;
+  height: 190px;
+  width: 85px;
+  rotate: 90deg;
+}
+.Layout-Hand {
+  display: flex;
+  flex-flow: column nowrap;
+  min-height: 125px;
+  position: relative;
+}
+.Layout-Hand > label {
+  text-align: center;
+}
+.Layout-Hand .Value {
+  padding: 5px 0;
+}
+.Layout-Hand section {
+  flex-flow: wrap;
+}
+.Layout-Hand section {
+  display: flex;
+  justify-content: center;
+  align-items: none;
+}
+.Layout-Hand section .Cards {
+  transition: translate 0.15s ease-in-out, transform 1s;
+  background-color: rgb(244, 244, 244);
+  border: 4px solid rgba(100, 100, 100, 0.15);
+  border-radius: 5px;
+  padding: 5px;
+  height: 125px;
+  width: 100px;
+}
+.Layout-Hand section .Cards:not(:first-child) {
+  margin-left: -50px;
+}
+.Layout-Hand section .Cards:hover {
+  translate: 0 -15px 0;
+  z-index: 1;
+}
+.Layout-Buttons {
+  display: flex;
+  align-items: flex-end;
+  height: 7rem;
+  flex-grow: 1;
+}
+.Layout-Buttons > div {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-self: start;
+  gap: 15px;
+  width: 100%;
+}
+.Layout-Buttons > div button {
+  height: 66px;
+  width: 128px;
+  outline: none;
+  border: none;
+  cursor: pointer;
+}
+.Layout-Buttons > div button:nth-child(1) {
+  background-color: rgba(0, 255, 0, 0.7);
+}
+.Layout-Buttons > div button:nth-child(2) {
+  background-color: rgb(255, 0, 0);
+}
+
+.Service-Messages {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  opacity: 0;
+  -webkit-backdrop-filter: blur(5px);
+          backdrop-filter: blur(5px);
+  background-color: rgba(200, 200, 200, 0.2);
+  transition: 0.2s ease-in-out;
+}
+.Service-Messages span {
+  display: inherit;
+  flex-direction: column;
+  font-size: 2em;
+  text-transform: uppercase;
+}
+
+.Bet {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+}
+.Bet label {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  text-align: center;
+  font-size: 1.15em;
+  color: rgba(50, 55, 30, 0.89);
+}
+.Bet > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: -moz-max-content;
+  width: max-content;
+  min-width: 8rem;
+}
+.Bet > div > div {
+  display: inherit;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 2.5px;
+}
+.Bet > div > div button {
+  font-size: 1.15em;
+  width: 70%;
+  height: 2rem;
+  cursor: pointer;
+}
+
+/*#region Turn dealers card*/
+.Runit {
+  transition: 1s;
+  transform: scale(1.0555) translateY(-25px) rotateY(90deg);
+}
+
+.RunItBack {
+  transform: scale(1.0555) translateY(-25px) rotateY(90deg);
+  animation: 2s TurnBack forwards;
+}
+
+@keyframes TurnBack {
+  100% {
+    transform: scale(1) translateY(0) rotateY(0);
+  }
+}
+/*#endregion*/
+/*#region Media queries*/
+@media only screen and (max-width: 846px) {
+  .Layout-Hand label:first-of-type {
+    padding-bottom: 0;
+  }
+  .Availeable-Cards {
+    top: 0 !important;
+  }
+}
+/*#endregion*//*# sourceMappingURL=blackjack.css.map */
