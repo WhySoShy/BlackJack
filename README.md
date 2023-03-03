@@ -122,5 +122,6 @@ Starts the game if gameState is false.
 * [v0.1.0](https://github.com/WhySoShy/BlackJack/releases/tag/v0.1.0)
 * [v0.2.0-beta](https://github.com/WhySoShy/BlackJack/releases/tag/v0.2.0-beta)
 
-
+## Lincense
+[MIT License](https://github.com/WhySoShy/BlackJack/blob/main/LICENSE)
 
