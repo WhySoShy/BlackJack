@@ -200,18 +200,18 @@ async function endGame() {
     let dealerValue = getCardValues('Dealer');
     const playerValue = getCardValues('Player');
     gameState = false;
-    console.log(playerValue < 21);
     if (playerValue < 21) {        
         while (dealerValue  < 17){
             await wait(250);
             await drawCard('Dealer', true);
             dealerValue = getCardValues('Dealer');
         }
-        if (playerValue > dealerValue) {
+        if (playerValue > dealerValue || dealerValue > 21) {
             setItem('playerBalance', (getItem('playerBalance') + (bet * 3)))
             await sendServiceMessage("You", "Win", "rgba(0,230,0,.9)");
         }
         else if (playerValue < dealerValue){
+            console.log("Tabt");
             await sendServiceMessage("You", "lost", "rgba(230,0,0,.9)");
         }
         else if (playerValue == dealerValue) {
