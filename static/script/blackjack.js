@@ -1,6 +1,3 @@
-// TODO: DONE | Add auto shuffle when the deck contains under 12 cards (After the round is done).
-// TODO: DONE | Find out why it removes and gives new card immediatly when not called in stand();
-// TODO: DONE(maybe) | Prevent spam clicking.
 import { getItem, setItem } from '../modules/storage.js';
 
 $('.balance').text(`$${getItem('playerBalance')}`)
@@ -237,14 +234,11 @@ async function endGame() {
         await createCards();
 
     hands = [];
-    await busted();
-    bet = 0;
-    updateBalanceUI();
-}
-async function busted() {
     dealerShownCard = false;
     $('.Dealer-Cards, .Player-Cards').empty();
     $('.Value span').text('0');
+    bet = 0;
+    updateBalanceUI();
 }
 
 //#endregion
