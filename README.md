@@ -5,9 +5,10 @@
 [Beta release](https://github.com/WhySoShy/BlackJack/releases/tag/v0.2.0-beta)
 
 ## Intro
-Fed intro her
+This was a school project where we had to create our own bank, i have chosen to implement a simpel bank that saves the data in localstorage with blackjack to it.
 
 ## How to run
+You first need to download [``node.js``](https://nodejs.org/en/)
 Go into the directory where you have saved the cloned repo, and enter
 ``node app.js``.
 
@@ -16,6 +17,11 @@ Go into the directory where you have saved the cloned repo, and enter
 | Extensions |
 | ---------- |
 | [Sass compiler](https://marketplace.visualstudio.com/items?itemName=glenn2223.live-sass) |
+
+| Packages |
+| ------------ |
+| [JQuery](https://jquery.com/download) |
+| [Express](https://www.npmjs.com/package/express) |
 
 ## Changelog
 #### [Version 0.0.0](https://github.com/WhySoShy/BlackJack/releases/tag/v0.0.0)
